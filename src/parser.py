@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 BASE_ROUTE: str = "https://alphardaudio.ru"
 
+# TODO: сделать получение ВСЕХ товаров, если нужно
 
 def get_product_links_by_category(category: str) -> list[str]:
     page = get(f"{BASE_ROUTE}/products/{category}")
