@@ -1,5 +1,6 @@
 from requests import get
 from bs4 import BeautifulSoup
+from requests_html import HTMLSession
 
 BASE_ROUTE: str = "https://alphardaudio.ru"
 
@@ -16,16 +17,20 @@ def get_product_links_by_category(category: str) -> list[str]:
 
 
 def get_product_info(product_link: str):
-    product_page = get(product_link)
-    print(product_page.status_code)
+    session = HTMLSession()
+    page = session.get(product_link)
+    page.html.render()
 
     product_info = dict()  # TODO: можно данные о товаре вынести в структуру
-    table = BeautifulSoup(product_page.text, "lxml").find("table", "table")
+    table = BeautifulSoup(page.html.html, "lxml").find("table", "table")
     rows = table.findAll("tr")
     for row in rows:
         cells = row.findAll("td")
         product_info[cells[0].getText()] = cells[1].getText().strip()
 
+    price = BeautifulSoup(page.html.html, "lxml").find("span", "price").getText().strip()
+    product_info["Цена"] = price
+    print(f"Processed: {product_info['Модель']}")
     return product_info
 
 
