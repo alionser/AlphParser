@@ -6,6 +6,7 @@
 #     frame.to_excel("text.xlsx")
 
 from openpyxl import Workbook
+from datetime import datetime
 
 
 def normalize_category_by_params(data: list[dict[str, str]]):
@@ -22,10 +23,9 @@ def normalize_category_by_params(data: list[dict[str, str]]):
             else:
                 product_list.append("")
         normalized_category.append(product_list)
-    print(normalized_category)
+    # print(normalized_category)
 
     return normalized_category
-
 
 
 def convert_data_to_exel(data: list[dict[str, str]]):
@@ -38,4 +38,5 @@ def convert_data_to_exel(data: list[dict[str, str]]):
     # for product in data[1:]:
     #     worksheet.append(list(product.values()))
     # worksheet.append(enumerate(list(data.values())))
-    workbook.save("товары.xlsx")
+    date = str(datetime.now())
+    workbook.save(f"../results/{date.replace(' ', '_').replace(':', '_').replace('-', '_')}.xlsx")
