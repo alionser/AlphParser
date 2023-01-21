@@ -25,6 +25,7 @@ def get_product_info(product_link: str):
     for row in rows:
         cells = row.findAll("td")
         product_info[cells[0].getText()] = cells[1].getText().strip()
+
     return product_info
 
 

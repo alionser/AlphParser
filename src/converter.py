@@ -9,24 +9,31 @@ from openpyxl import Workbook
 
 
 def normalize_category_by_params(data: list[dict[str, str]]):
-    types = {}
+    headers = set()
     for product in data:
-        if tuple(product.keys()) not in types:
-            types[tuple(product.keys())] = list()
-            types[tuple(product.keys())].append(product.values())
-        else:
-            types[tuple(product.keys())].append(product.values())
-    return types
+        headers = headers.union(set(product.keys()))
+
+    normalized_category = [list(headers), ]
+    for product in data:
+        product_list = []
+        for col in list(headers):
+            if col in product:
+                product_list.append(product[col])
+            else:
+                product_list.append("")
+        normalized_category.append(product_list)
+    print(normalized_category)
+
+    return normalized_category
+
 
 
 def convert_data_to_exel(data: list[dict[str, str]]):
     data = normalize_category_by_params(data)
     workbook = Workbook()
     worksheet = workbook.active
-    for product_type in data:
-        worksheet.append(list(product_type))
-        for product in data[product_type]:
-            worksheet.append(list(product))
+    for row in data:
+        worksheet.append(row)
     # worksheet.append(list(data[0].keys()))
     # for product in data[1:]:
     #     worksheet.append(list(product.values()))
